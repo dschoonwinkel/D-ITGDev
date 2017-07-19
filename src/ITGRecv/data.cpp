@@ -335,11 +335,6 @@ void *udpSock(void *param)
 	
 	FILE* fp;
 
-	fp = fopen("receiver_dump.bin", "wb");
-	if (fp == NULL) {
-		printf("ERROR opening file");
-	}
-
 	HANDLE hComm = 0;
 
 	
@@ -378,6 +373,12 @@ void *udpSock(void *param)
 	unsigned long secs = 0, msecs = 0;
 #endif
 	
+//	printf("Dumpfile name %s", paraThread->dumpFilename);
+	fp = fopen(paraThread->dumpFilename, "wb");
+		if (fp == NULL) {
+			printf("ERROR opening file %s", paraThread->dumpFilename);
+		}
+
 	paraThread->addressInfos = infos;
 	
 	paraThread->count = 0;
@@ -589,7 +590,7 @@ void *udpSock(void *param)
 						
 				size_r = recvfrom(sock, (char *) payload, MAX_PAYLOAD_SIZE, 0, NULL, NULL);	
 			}
-			printf("Received datagram");
+
 			if (fwrite(payload, 1, size_r, fp) < 0) {
 				reportErrorAndExit("udpSock", "recvfrom", "Unable to write to file");
 			}

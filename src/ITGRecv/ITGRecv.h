@@ -35,9 +35,6 @@
 #define MSG_FT_ERR_SOCK 4
 
 
-
-
-
 struct paramThread {
 	BYTE l7Proto;				
 	struct addrinfo destHost;		
@@ -66,6 +63,7 @@ struct paramThread {
 #ifdef MULTIPORT
 	uint16_t indexPort;
 #endif
+	char *dumpFilename;
 };
 
 

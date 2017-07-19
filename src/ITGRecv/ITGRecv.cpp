@@ -144,7 +144,11 @@ unsigned short numHolePkt=1;
 
 char * SigInterface = NULL;			
 
-struct addrinfo *globalBindAddr = NULL;         
+struct addrinfo *globalBindAddr = NULL;
+
+char * globalDumpFilename;
+
+
 
 void* waitStopKey(void* s)
 {
@@ -1101,9 +1105,6 @@ void pipeParser(int newSockSignaling, int &numFlow, HANDLE rPipe[],
 		reportErrorAndExit("pipeParser", "", "Cannot receive message into pipe");
 	}
 
-
-	printf("*****I got a message!\n");
-	// printf("%s", msg);
 	switch (msg.code) {
 	case MSG_FT_ERR1:
 		PRINTD(1,"pipeParser: Error into bind - flow %d \n", msg.flowId);
@@ -1426,7 +1427,7 @@ int typeParser(BYTE type, int &numFlow, int newSockSignaling,
 			flowIdNum[flowPosition].l4Proto = *ptrl4Proto;
 			PRINTD(1,"typeParser: Level 4 Protocol Received : %s\n", l4Protocols[(unsigned int)(flowIdNum[flowPosition].l4Proto)]);
 
-			
+			paraThread[flowPosition].dumpFilename = globalDumpFilename;
 
 			
 			paraThread[flowPosition].l7Proto = *ptrl7Proto;
@@ -2138,6 +2139,20 @@ void parserRecv(int argc, char *argv[])
 				reportErrorAndExit("parserRecv","general parser","Invalid address for \"-a\" option");
 			NEXT_OPT;
 			break;
+
+		case 'D':
+//			printf("Starting dumpFileName copy");
+
+			if (argc > 1 && argv[1][0] != '-') {
+				globalDumpFilename = (char*) malloc(strlen(argv[1]) + 1);
+				strcpy(globalDumpFilename, argv[1]);
+				NEXT_OPT;
+			} else {
+
+				globalDumpFilename = (char*) malloc(strlen("receiver_dump.bin") + 1);
+				strcpy(globalDumpFilename, "receiver_dump.bin");
+			}
+			break;
 		
 		default:
 			printf("parserRecv: Unknow option : %s\n\n", argv[0]);
@@ -2162,7 +2177,7 @@ int main(int argc, char *argv[])
 	pthread_t hThr[MAX_NUM_THREAD];
 
 	printVersion("ITGRecv");
-	printf("Hello world!");
+	printf("Modified by Daniel Schoonwinkel for dumping received data\n");
 
 	if (argc > 1){
 		if (strcmp(argv[1],"-gui") == 0){
