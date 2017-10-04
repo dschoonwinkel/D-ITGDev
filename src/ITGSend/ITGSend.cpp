@@ -317,7 +317,24 @@ int modeScript(int argc, char *argv[])
 int modeCommandLine(int argc, char *argv[])
 {
 	PRINTD(1,"modeCommandLine: mode started\n");
-	parserParams[0].flowId = 1;
+//	Find flow id: go through all commandline args, check for flowid
+	int i = 0;
+	int flowid = 1;
+	for (i = 0; i < argc; i++) {
+
+		if (argv[i][0] == '-') {
+			if (strcmp(&argv[i][1], "flowid") == 0) {
+				char* endptr;
+				flowid = (int)strtol(argv[i+1], &endptr, 10);
+				PRINTD(1,"modeCommandLine: flowid found %d \n", flowid);
+			}
+		}
+	}
+
+	if (flowid >= 200) {
+		ReportErrorAndExit("modeCommandline"," Please keep flowid below 200", programName, 0);
+	}
+	parserParams[0].flowId = flowid;
 	cmdMode = true;
 	argvToString(argv, argc, parserParams[0].line);
 	flowParser(&parserParams[0]);
@@ -329,6 +346,7 @@ int modeCommandLine(int argc, char *argv[])
 int main(int argc, char *argv[])
 {
 	printVersion("ITGSend");
+	printf("Modified by Daniel Schoonwinkel to alter flowID");
 	
 	strcpy(programName, argv[0]);
 	argv++;
@@ -838,6 +856,18 @@ void *flowParser(void *param)
 				}
 				break;
 			case 'f':
+
+//				Ignore -flowid case, already handled
+				if (strcmp(&argv[h][1], "flowid") == 0) {
+					char* endptr;
+					int flowid = (int)strtol(argv[h+1], &endptr, 10);
+					PRINTD(1,"flowParser: Ignoring(already handled) flowid found %d \n", flowid);
+					h += 2;
+					argc -= 2;
+					break;
+
+				}
+
 				if (argc < 2)
 					ReportErrorAndExit("General parser", "Invalid TTL",
 					    programName, id);
@@ -845,6 +875,7 @@ void *flowParser(void *param)
 				strcpy(flows[id].serialReceiver,"noSerial");if ((tail == argv[h + 1]) || (temp < 0) || (temp > 255))
 					ReportErrorAndExit("General parser", "Invalid TTL",
 					    programName, id);
+				PRINTD(1,"flowParser: -f found with %ld \n", temp);
 				flows[id].TTL = temp;
 				h += 2;
 				argc -= 2;

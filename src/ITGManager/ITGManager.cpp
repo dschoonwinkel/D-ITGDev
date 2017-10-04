@@ -94,8 +94,8 @@ int main(int argc, char* argv[])
 
 	do {
 		if ((i = catchManagerMsg(&sender, &msg)) != MNG_NOMSG) {
-			printf("Received msg type %d   %s   %s\n", i, sender, msg);
-			fflush(stdout);
+	// 		printf("Received msg type %d   %s   %s\n", i, sender, msg);
+	// 		fflush(stdout);
 		}
 #ifdef UNIX
 		sleep(1);

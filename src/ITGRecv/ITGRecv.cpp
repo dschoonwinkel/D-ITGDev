@@ -1100,7 +1100,7 @@ void pipeParser(int newSockSignaling, int &numFlow, HANDLE rPipe[],
 {
 	struct pipeMsg msg;
 	uint16_t port = 0;
-	
+
 	if (recvPipeMsg(rPipe, &msg) < 0) {
 		reportErrorAndExit("pipeParser", "", "Cannot receive message into pipe");
 	}

@@ -591,8 +591,10 @@ void *udpSock(void *param)
 				size_r = recvfrom(sock, (char *) payload, MAX_PAYLOAD_SIZE, 0, NULL, NULL);	
 			}
 
-			if (fwrite(payload, 1, size_r, fp) < 0) {
-				reportErrorAndExit("udpSock", "recvfrom", "Unable to write to file");
+			if (fp != NULL) {
+				if (fwrite(payload, 1, size_r, fp) < 0) {
+					reportErrorAndExit("udpSock", "recvfrom", "Unable to write to file");
+				}
 			}
 			PRINTD(2,"udpSock: Received DATAGRAM packet\n");
 
