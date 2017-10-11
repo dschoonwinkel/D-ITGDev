@@ -46,3 +46,10 @@ Collaborating
 If you are interested in collaborating with us, please send an e-mail 
 to: ditg@comics.unina.it
 
+
+Changes
+======================
+Daniel Schoonwinkel modified source to dump received data to binary file. Used for checking accurate transfer over UDP.
+
+
+
