@@ -346,7 +346,7 @@ int modeCommandLine(int argc, char *argv[])
 int main(int argc, char *argv[])
 {
 	printVersion("ITGSend");
-	printf("Modified by Daniel Schoonwinkel to alter flowID");
+	printf("Modified by Daniel Schoonwinkel to alter flowID\n");
 	
 	strcpy(programName, argv[0]);
 	argv++;

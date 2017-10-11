@@ -376,7 +376,7 @@ void *udpSock(void *param)
 //	printf("Dumpfile name %s", paraThread->dumpFilename);
 	fp = fopen(paraThread->dumpFilename, "wb");
 		if (fp == NULL) {
-			printf("ERROR opening file %s", paraThread->dumpFilename);
+			PRINTD("ERROR opening file %s\n", paraThread->dumpFilename);
 		}
 
 	paraThread->addressInfos = infos;
